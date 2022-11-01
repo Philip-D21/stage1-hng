@@ -4,7 +4,7 @@ const url = require("url");
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-   // if (req.method == 'GET' && req.url === '/' ) 
+ if (req.method == 'GET' && req.url === '/' ) 
         res.setHeader("content-type","application/json")
         res.write(`{
             "slackUsername":"Philip Daudu","age": 22,"backend": true, 
