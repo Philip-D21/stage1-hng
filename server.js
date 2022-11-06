@@ -1,28 +1,53 @@
 const http = require('http');
 const url = require("url");
+const express = require("express");
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 
+const app = express();
+
+
+app.use(express.json());
 const server = http.createServer((req, res) => {
     res.setHeader("content-type","application/json")
     if (req.method !== 'GET') {
         res.end(`{"error": "error in routes"}`)
     } else {
-        if (req.url === '/') {
+        if (req.url === '/api/user') {
            res.end(`{"slackUsername":"Philip Daudu","age": 22,"backend": true ,"bio":" I'm passionate about building, growing and collaborating with teams"}`)
         }
     }
     });
 
-//  if (req.method == 'GET' && req.url == '/' ) 
-//         res.setHeader("content-type","application/json")
-//         res.write(`{
-//             "slackUsername":"Philip Daudu","age": 22,"backend": true, 
-//             "bio":" I'm passionate about building, growing and collaborating with teams"
-//            }`)
-    
-//         res.end();
-// })
+
+app.post('/', (req, res) => {
+        const  operation_type = req.body.operation_type
+        const  x = req.body.x
+        const  y = req.body.y
+      
+        if (isNaN(x) || isNaN(y))
+          return res.send({
+            error: "Values are invalid"
+          })
+      
+        let result = ''
+      
+        if (operation_type.toLowerCase() === "addition") {
+          result = x + y
+        }
+        else if (operation_type.toLowerCase() === "multiplication") {
+          result = +x * +y
+        }
+        else if (operation_type.toLowerCase() === "subtraction") {
+          result = +x - +y
+        }
+        else { return res.send({
+          error: "Available operation_type are 'addition', 'multiplication', or 'subtraction' "
+        })}
+      
+        res.send({slackUsername: 'Philip-D21', result, operation_type })
+      })
+      
 
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
